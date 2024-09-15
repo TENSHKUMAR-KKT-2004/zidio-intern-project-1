@@ -24,7 +24,7 @@ function TextEditor({
           {label}
           {isRequired && <span className="text-gray-500 ml-2">*</span>}
         </div>
-        {aiButton && (
+        {/* {aiButton && (
           <div className="flex justify-end">
             <span
               className={`bg-black w-36 py-1 px-1 text-xs text-white text-center rounded cursor-pointer ${
@@ -37,7 +37,7 @@ function TextEditor({
                 : "✨ Generate using AI"}
             </span>
           </div>
-        )}
+        )} */}
       </label>
       {description && (
         <span className="text-gray-500 text-sm ml-1.5 ">{description}</span>

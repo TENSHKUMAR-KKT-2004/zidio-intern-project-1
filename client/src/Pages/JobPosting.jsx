@@ -94,56 +94,6 @@ function JobPosting() {
     }
   };
 
-  const handleGenerate = async () => {
-    formData.employer = userData.userProfile.companyName;
-    if (formData.hasOwnProperty("description")) {
-      delete formData.description;
-    }
-
-    if (formData.hasOwnProperty("urgent")) {
-      delete formData.urgent;
-    }
-
-    for (let field in formData) {
-      if (field !== "description" && field !== "urgent" && !formData[field]) {
-        setDialog({
-          isOpen: true,
-          title: "Incomplete Form",
-          message:
-            "Please fill all the form details to generate job description.",
-          buttonText: "OK",
-        });
-        return;
-      }
-    }
-    setGeneratingDescription(true);
-    try {
-      const res = await companyService.generateJobDescription(formData);
-
-      setGeneratingDescription(false);
-      setFormData({ ...formData, description: res.data.data });
-    } catch (error) {
-      if (error.response.data.message.includes("Quota exceeded")) {
-        setDialog({
-          isOpen: true,
-          title: "Quota Exceeded",
-          message:
-            "Error: Quota exceeded. You reached the limit for free job description generations. An upgrade to the plan is required to continue using this feature.",
-          buttonText: "OK",
-        });
-      } else {
-        setDialog({
-          isOpen: true,
-          title: "Error genetating job description",
-          message: error.response.data.message,
-          buttonText: "OK",
-        });
-      }
-
-      setGeneratingDescription(false);
-    }
-  };
-
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async (e) => {

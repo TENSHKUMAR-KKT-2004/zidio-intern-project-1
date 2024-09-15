@@ -2,7 +2,6 @@ import { Job } from "../models/job.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-// import { generateJobDescription } from "../utils/openAi.service.js";
 import { User } from "../models/user.model.js";
 import { JSDOM } from "jsdom";
 import createDOMPurify from "dompurify";
@@ -196,40 +195,6 @@ const postJob = asyncHandler(async (req, res, next) => {
     .json(new ApiResponse(200, job, "Job posted successfully"));
 });
 
-const sendJobDescription = asyncHandler(async (req, res) => {
-  const { role, _id } = req.user;
-  const jobDetails = req.body;
-
-  if (role !== "employer") {
-    throw new ApiError(
-      403,
-      "Unauthorized action. Only users with an 'employer' role are permitted to generate job descriptions."
-    );
-  }
-
-  const user = await User.findById(_id);
-  if (user.userProfile?.aiUseLimit < 1) {
-    throw new ApiError(
-      429,
-      "Quota exceeded. The user has reached the limit for free job description generations. An upgrade to the plan is required to continue using this feature."
-    );
-  }
-
-  // const response = await generateJobDescription(jobDetails);
-  const response = 'ferfef'
-
-  if (response) {
-    user.userProfile.aiUseLimit -= 1;
-    await user.save();
-  }
-
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(200, response, "Job description generated successfully")
-    );
-});
-
 const applyForJob = asyncHandler(async (req, res) => {
   const { role, _id } = req.user;
   const jobId = req.params.id;
@@ -379,7 +344,6 @@ export {
   getJobs,
   getJobById,
   postJob,
-  sendJobDescription,
   applyForJob,
   saveJob,
   getJobLocations,
